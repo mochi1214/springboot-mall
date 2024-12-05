@@ -1,4 +1,4 @@
-package com.lila.springbootmall.rowapper;
+package com.lila.springbootmall.rowmapper;
 
 import com.lila.springbootmall.category.ProductCategory;
 import com.lila.springbootmall.model.Product;
