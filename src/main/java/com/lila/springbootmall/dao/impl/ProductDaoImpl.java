@@ -1,14 +1,11 @@
 package com.lila.springbootmall.dao.impl;
 
-import com.lila.springbootmall.category.ProductCategory;
 import com.lila.springbootmall.dao.ProductDao;
 import com.lila.springbootmall.dto.ProductQueryParams;
 import com.lila.springbootmall.dto.ProductRequest;
 import com.lila.springbootmall.model.Product;
-import com.lila.springbootmall.rowapper.ProductRowMapper;
+import com.lila.springbootmall.rowmapper.ProductRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
