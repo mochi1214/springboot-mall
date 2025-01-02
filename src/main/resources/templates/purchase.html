@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品列表</title>
+    <style>
+        /* 網格樣式 */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* 單個商品樣式 */
+        .product-item {
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .product-item h3 {
+            font-size: 16px;
+            margin: 10px 0 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<h1 style="text-align: center;">商品列表</h1>
+<div class="product-grid">
+    <div class="product-item" th:each="product : ${products}">
+        <img th:src="${product.imageUrl}" alt="商品圖片">
+        <h3 th:text="${product.productName}"></h3>
+    </div>
+</div>
+</body>
+</html>
