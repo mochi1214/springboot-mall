@@ -5,6 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>購物頁面</title>
     <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header .title {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .header .actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header .actions a {
+            text-decoration: none;
+            padding: 8px 12px;
+            font-size: 14px;
+            color: #007bff;
+            border-radius: 4px;
+        }
+
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -64,14 +93,28 @@
     </style>
 </head>
 <body>
-<h1 style="text-align: center;">購物頁面</h1>
+
+<!-- 頁面標題區域 -->
+<div class="header">
+    <h1 class="title">購物頁面</h1>
+    <div class="actions">
+        <a th:href="@{/cart}" th:text="'購物車(' + ${cartItemCount} + ')'"></a>
+        <span class="divider">｜</span>
+        <a th:href="@{/orders}">訂單查詢</a>
+    </div>
+</div>
+
+
+<!-- 商品列表 -->
 <div class="product-grid">
     <div class="product-item" th:each="product : ${products}">
         <img th:src="${product.imageUrl}" alt="商品圖片">
         <h3 th:text="${product.productName}"></h3>
         <div class="price" th:text="'價格: ' + ${product.price} + ' 元'"></div>
         <div class="stock" th:text="'庫存: ' + ${product.stock} + ' 件'"></div>
-        <a class="cart-button" href="#" th:href="'/cart/add/' + ${product.productId}">放入購物車</a>
+        <form th:action="@{'/cart/add/' + ${product.productId}}" method="post">
+            <button type="submit" class="cart-button">放入購物車</button>
+        </form>
     </div>
 </div>
 </body>

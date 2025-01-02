@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>購物車</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    table thead tr {
+      background-color: #f4f4f4;
+    }
+
+    table th, table td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    table th {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    .total-row {
+      font-weight: bold;
+      background-color: #f4f4f4;
+    }
+
+    .empty-cart {
+      text-align: center;
+      color: #777;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<h1>購物車</h1>
+
+<div>
+  <!-- 如果購物車為空，顯示提示訊息 -->
+  <div th:if="${cartItems.size() == 0}" class="empty-cart">
+    您的購物車是空的。
+  </div>
+
+  <!-- 如果購物車有商品，顯示商品列表 -->
+  <table th:if="${cartItems.size() > 0}">
+    <thead>
+    <tr>
+      <th>商品名稱</th>
+      <th>數量</th>
+      <th>單價</th>
+      <th>總價</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="cartItem : ${cartItems}">
+      <td th:text="${cartItem.productName ?: '未命名商品'}"></td>
+      <td th:text="${cartItem.quantity ?: 0}"></td>
+      <td th:text="${cartItem.price ?: 0} + ' 元'"></td>
+      <td th:text="${(cartItem.quantity ?: 0) * (cartItem.price ?: 0)} + ' 元'"></td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr class="total-row">
+      <td colspan="3">總計</td>
+      <td th:text="${totalAmount} + ' 元'"></td>
+    </tr>
+    </tfoot>
+  </table>
+</div>
+</body>
+</html>
+

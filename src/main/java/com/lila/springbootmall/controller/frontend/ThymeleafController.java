@@ -1,7 +1,9 @@
 package com.lila.springbootmall.controller.frontend;
 
+import com.lila.springbootmall.dto.CartItem;
 import com.lila.springbootmall.dto.ProductQueryParams;
 import com.lila.springbootmall.model.Product;
+import com.lila.springbootmall.service.CartService;
 import com.lila.springbootmall.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -26,6 +29,9 @@ public class ThymeleafController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private CartService cartService;
 
     @GetMapping("/home")
     public String home(){
@@ -89,6 +95,31 @@ public class ThymeleafController {
         // 將商品數據傳遞給模板
         model.addAttribute("products", products);
         return "purchase";
+    }
+
+    @GetMapping("/cart")
+    public String viewCart(Model model) {
+        List<CartItem> cartItems = cartService.getCartItems();
+
+        // 計算總金額
+        int totalAmount = cartItems.stream()
+                .mapToInt(item -> (item.getQuantity() != null ? item.getQuantity() : 0) *
+                        (item.getPrice() != null ? item.getPrice() : 0))
+                .sum();
+
+        // 將數據傳遞到模板
+        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("cartItemCount", cartService.getCartItemCount());
+        model.addAttribute("totalAmount", totalAmount); // 新增總金額
+        return "cart";
+    }
+
+
+    @PostMapping("/cart/add/{productId}")
+    public String addToCart(@PathVariable Integer productId) {
+        // 預設添加 1 個商品到購物車
+        cartService.addItem(productId, 1);
+        return "redirect:/purchase";
     }
 
 }
