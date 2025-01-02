@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>註冊頁面</title>
+  <style>
+
+    form {
+      margin-top: 20px;
+    }
+
+    /* 輸入框的上下間距 */
+    .input-field {
+      margin-bottom: 15px; /* 控制輸入框之間的間距 */
+    }
+
+    /* 輸入框樣式 */
+    .input-field input {
+      width: 15%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    /* 登入按鈕樣式 */
+    input[type="submit"] {
+      margin-top: 10px;
+      padding: 8px 16px;
+      font-size: 16px;
+    }
+
+    /* 註冊會員區域樣式 */
+    .register-section {
+      margin-top: 15px;
+      font-size: 13px;
+    }
+
+    .return-section a {
+      text-decoration: underline;
+      color: blue;
+    }
+
+    .register-section a:hover {
+      font-weight: bold; /* 滑鼠懸停加粗 */
+    }
+
+    p {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<h1>註冊帳號</h1>
+
+<form method="post" action="/register">
+  <div class="input-field">
+    <input type="text" name="email" placeholder="帳號ID或email" required>
+  </div>
+  <div class="input-field">
+    <input type="password" name="password" placeholder="密碼 Password" required>
+  </div>
+  <input type="submit" value="註冊">
+</form>
+
+<p>[[${error}]]</p>
+
+<div class="return-section">
+  <a href="/home">返回首頁</a>
+</div>
+
+</body>
+</html>
