@@ -1,5 +1,8 @@
 package com.lila.springbootmall.controller.frontend;
 
+import com.lila.springbootmall.dto.ProductQueryParams;
+import com.lila.springbootmall.model.Product;
+import com.lila.springbootmall.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.ui.Model;
 import com.lila.springbootmall.dto.UserLoginRequest;
@@ -20,6 +23,9 @@ public class ThymeleafController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ProductService productService;
 
     @GetMapping("/home")
     public String home(){
@@ -70,40 +76,19 @@ public class ThymeleafController {
 
     @GetMapping("/purchase")
     public String getProducts(Model model) {
-        List<Map<String, Object>> products = List.of(
-                Map.of(
-                        "productName", "Tesla",
-                        "imageUrl", "https://cdn.pixabay.com/photo/2021/01/15/16/49/tesla-5919764_1280.jpg"
-                ),
-                Map.of(
-                        "productName", "Benz",
-                        "imageUrl", "https://cdn.pixabay.com/photo/2017/03/27/14/56/auto-2179220_1280.jpg"
-                ),
-                Map.of(
-                        "productName", "BMW",
-                        "imageUrl", "https://cdn.pixabay.com/photo/2018/02/21/03/15/bmw-m4-3169357_1280.jpg"
-                ),
-                Map.of(
-                        "productName", "Toyota",
-                        "imageUrl", "https://cdn.pixabay.com/photo/2014/05/18/19/13/toyota-347288_1280.jpg"
-                ),
-                Map.of(
-                        "productName", "好吃又鮮甜的蘋果橘子",
-                        "imageUrl", "https://cdn.pixabay.com/photo/2021/07/30/04/17/orange-6508617_1280.jpg"
-                ),
-                Map.of(
-                        "productName", "蘋果（日本北海道）",
-                        "imageUrl", "https://cdn.pixabay.com/photo/2017/09/26/13/42/apple-2788662_1280.jpg"
-                ),
-                Map.of(
-                        "productName", "蘋果（澳洲）",
-                        "imageUrl", "https://cdn.pixabay.com/photo/2016/11/30/15/00/apples-1872997_1280.jpg"
-                )
-        );
+        // 初始化查詢參數並設置默認值
+        ProductQueryParams productQueryParams = new ProductQueryParams();
+        productQueryParams.setOrderBy("created_date"); // 默認按創建日期排序
+        productQueryParams.setSort("desc"); // 默認降序
+        productQueryParams.setLimit(10); // 默認每頁顯示 10 條數據
+        productQueryParams.setOffset(0); // 默認從第一條數據開始
+
+        // 從資料庫獲取商品數據
+        List<Product> products = productService.getAllProducts(productQueryParams);
 
         // 將商品數據傳遞給模板
         model.addAttribute("products", products);
-        return "purchase"; // 返回商品頁面的模板名稱
+        return "purchase";
     }
 
 }
