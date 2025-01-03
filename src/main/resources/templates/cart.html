@@ -150,10 +150,10 @@
     </thead>
     <tbody>
     <tr th:each="cartItem : ${cartItems}">
-      <td th:text="${cartItem.productName ?: '未命名商品'}"></td>
-      <td th:text="${cartItem.quantity ?: 0}"></td>
-      <td th:text="${cartItem.price ?: 0} + ' 元'"></td>
-      <td th:text="${(cartItem.quantity ?: 0) * (cartItem.price ?: 0)} + ' 元'"></td>
+      <td th:text="${cartItem.productName}"></td>
+      <td th:text="${cartItem.quantity}"></td>
+      <td th:text="${cartItem.price} + ' 元'"></td>
+      <td th:text="${cartItem.quantity * cartItem.price} + ' 元'"></td>
       <td>
         <form th:action="@{'/cart/remove/' + ${cartItem.productId}}" method="post">
           <button type="submit" class="remove-button">移除</button>

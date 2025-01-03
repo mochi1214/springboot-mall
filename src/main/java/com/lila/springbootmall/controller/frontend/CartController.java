@@ -27,12 +27,12 @@ public class CartController {
         }
     }
 
-    // 移除購物車中的商品
-    @DeleteMapping("/remove/{productId}")
-    public ResponseEntity<String> removeItemFromCart(@PathVariable Integer productId) {
+    @PostMapping("/cart/remove/{productId}")
+    public RedirectView removeFromCart(@PathVariable Integer productId, RedirectAttributes redirectAttributes) {
         cartService.removeItem(productId);
-        return ResponseEntity.ok("商品已成功從購物車中移除");
+        return new RedirectView("/cart");
     }
+
 
     // 清空購物車
     @PostMapping("/cart/clear")
