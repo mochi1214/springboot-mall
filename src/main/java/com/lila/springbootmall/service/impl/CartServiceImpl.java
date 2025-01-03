@@ -6,6 +6,7 @@ import com.lila.springbootmall.service.CartService;
 import com.lila.springbootmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +16,6 @@ import java.util.Map;
 @Component
 public class CartServiceImpl implements CartService {
 
-    // 模擬的購物車存儲（可以改為存儲到 Session 或資料庫）
     private final Map<Integer, CartItem> cart = new HashMap<>();
 
     @Autowired
@@ -23,26 +23,20 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void addItem(Integer productId, Integer quantity) {
-        // 檢查購物車中是否已存在該商品
+        Product product = productService.getProductById(productId);
+        if (product == null) {
+            throw new IllegalArgumentException("商品不存在！");
+        }
+
         CartItem item = cart.get(productId);
-
         if (item == null) {
-            // 商品第一次加入購物車，從 ProductService 獲取商品信息
-            Product product = productService.getProductById(productId);
-
-            if (product != null) {
-                item = new CartItem();
-                item.setProductId(product.getProductId());
-                item.setProductName(product.getProductName());
-                item.setPrice(product.getPrice());
-                item.setQuantity(quantity);
-                cart.put(productId, item);
-            } else {
-                // 如果商品不存在，記錄錯誤或丟擲異常
-                throw new IllegalArgumentException("商品不存在，無法添加到購物車");
-            }
+            item = new CartItem();
+            item.setProductId(productId);
+            item.setProductName(product.getProductName());
+            item.setPrice(product.getPrice());
+            item.setQuantity(quantity);
+            cart.put(productId, item);
         } else {
-            // 如果商品已存在，增加數量
             item.setQuantity(item.getQuantity() + quantity);
         }
     }
@@ -54,7 +48,19 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Integer getCartItemCount() {
-        return cart.values().stream().mapToInt(CartItem::getQuantity).sum();
+        return cart.values().stream()
+                .mapToInt(item -> item.getQuantity() != null ? item.getQuantity() : 0)
+                .sum();
+    }
+
+    @Override
+    public void removeItem(Integer productId) {
+        cart.remove(productId);
+    }
+
+    @Override
+    public void clearCart() {
+        cart.clear();
     }
 }
 

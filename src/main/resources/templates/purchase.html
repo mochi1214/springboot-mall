@@ -98,7 +98,7 @@
 <div class="header">
     <h1 class="title">購物頁面</h1>
     <div class="actions">
-        <a th:href="@{/cart}" th:text="'購物車(' + ${cartItemCount} + ')'"></a>
+        <a th:href="@{/cart}" th:text="'購物車(' + (${cartItemCount} ?: 0) + ')'"></a>
         <span class="divider">｜</span>
         <a th:href="@{/orders}">訂單查詢</a>
     </div>

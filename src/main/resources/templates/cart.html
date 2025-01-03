@@ -10,6 +10,29 @@
       margin: 20px;
     }
 
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .header .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header .actions a {
+      text-decoration: none;
+      padding: 8px 12px;
+      font-size: 14px;
+      color: #007bff;
+      border-radius: 4px;
+    }
+
     h1 {
       text-align: center;
       color: #333;
@@ -47,10 +70,66 @@
       font-size: 18px;
       margin-top: 20px;
     }
+
+    .cart-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .cart-buttons a, .cart-buttons button {
+      padding: 10px 15px;
+      font-size: 16px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .cart-buttons .back-button {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .cart-buttons .clear-cart {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .cart-buttons .clear-cart:hover {
+      background-color: #b02a37;
+    }
+
+    .cart-buttons .back-button:hover {
+      background-color: #218838;
+    }
+
+    .remove-button {
+      background-color: #ff9800;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .remove-button:hover {
+      background-color: #e68900;
+    }
+
   </style>
 </head>
 <body>
-<h1>購物車</h1>
+
+<!-- 頁面標題區域 -->
+<div class="header">
+  <h1>購物車</h1>
+  <div class="actions">
+    <a th:href="@{/cart}" th:text="'購物車(' + (${cartItemCount} ?: 0) + ')'"></a>
+    <span class="divider">｜</span>
+    <a th:href="@{/orders}">訂單查詢</a>
+  </div>
+</div>
 
 <div>
   <!-- 如果購物車為空，顯示提示訊息 -->
@@ -66,6 +145,7 @@
       <th>數量</th>
       <th>單價</th>
       <th>總價</th>
+      <th>操作</th>
     </tr>
     </thead>
     <tbody>
@@ -74,16 +154,30 @@
       <td th:text="${cartItem.quantity ?: 0}"></td>
       <td th:text="${cartItem.price ?: 0} + ' 元'"></td>
       <td th:text="${(cartItem.quantity ?: 0) * (cartItem.price ?: 0)} + ' 元'"></td>
+      <td>
+        <form th:action="@{'/cart/remove/' + ${cartItem.productId}}" method="post">
+          <button type="submit" class="remove-button">移除</button>
+        </form>
+      </td>
     </tr>
     </tbody>
     <tfoot>
     <tr class="total-row">
       <td colspan="3">總計</td>
       <td th:text="${totalAmount} + ' 元'"></td>
+      <td></td>
     </tr>
     </tfoot>
   </table>
+
+  <!-- 操作按鈕 -->
+  <div class="cart-buttons">
+    <a class="back-button" th:href="@{/purchase}">返回購物頁面</a>
+    <form th:action="@{/cart/clear}" method="post">
+      <button type="submit" class="clear-cart">清空購物車</button>
+    </form>
+  </div>
 </div>
+
 </body>
 </html>
-

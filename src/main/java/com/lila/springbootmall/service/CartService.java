@@ -12,4 +12,8 @@ public interface CartService {
 
     Integer getCartItemCount();
 
+    void removeItem(Integer productId);
+
+    void clearCart();
+
 }

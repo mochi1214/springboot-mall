@@ -82,18 +82,21 @@ public class ThymeleafController {
 
     @GetMapping("/purchase")
     public String getProducts(Model model) {
-        // 初始化查詢參數並設置默認值
+        // 初始化查詢參數
         ProductQueryParams productQueryParams = new ProductQueryParams();
-        productQueryParams.setOrderBy("created_date"); // 默認按創建日期排序
-        productQueryParams.setSort("desc"); // 默認降序
-        productQueryParams.setLimit(10); // 默認每頁顯示 10 條數據
-        productQueryParams.setOffset(0); // 默認從第一條數據開始
+        productQueryParams.setOrderBy("created_date");
+        productQueryParams.setSort("desc");
+        productQueryParams.setLimit(10);
+        productQueryParams.setOffset(0);
 
-        // 從資料庫獲取商品數據
+        // 獲取商品數據
         List<Product> products = productService.getAllProducts(productQueryParams);
 
-        // 將商品數據傳遞給模板
+        // 獲取購物車數量
+        int cartItemCount = cartService.getCartItemCount();
+
         model.addAttribute("products", products);
+        model.addAttribute("cartItemCount", cartItemCount); // ✅ 加入購物車數量
         return "purchase";
     }
 
@@ -107,17 +110,15 @@ public class ThymeleafController {
                         (item.getPrice() != null ? item.getPrice() : 0))
                 .sum();
 
-        // 將數據傳遞到模板
-        model.addAttribute("cartItems", cartItems);
         model.addAttribute("cartItemCount", cartService.getCartItemCount());
-        model.addAttribute("totalAmount", totalAmount); // 新增總金額
+        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("totalAmount", totalAmount);
         return "cart";
     }
 
-
     @PostMapping("/cart/add/{productId}")
     public String addToCart(@PathVariable Integer productId) {
-        // 預設添加 1 個商品到購物車
+        // 預設添加商品到購物車
         cartService.addItem(productId, 1);
         return "redirect:/purchase";
     }
